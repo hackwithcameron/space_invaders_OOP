@@ -16,3 +16,13 @@ class Player(Ship):
         self.max_health = health
         self.player_speed = 5
 
+    def move(self, window_width, window_height):
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_a] and self.x > 0:  # Move Left
+            self.x -= self.player_speed
+        if keys[pygame.K_d] and self.x + self.get_width() < window_width:  # Move Right
+            self.x += self.player_speed
+        if keys[pygame.K_w] and self.y > 0:  # Move Up
+            self.y -= self.player_speed
+        if keys[pygame.K_s] and self.y + self.get_height() + self.player_speed < window_height:  # Move Down
+            self.y += self.player_speed

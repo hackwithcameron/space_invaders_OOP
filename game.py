@@ -47,3 +47,5 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.play = False
+
+            self.player.move(levels.WIDTH, levels.HEIGHT)
