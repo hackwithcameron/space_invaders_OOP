@@ -16,7 +16,7 @@ class Laser:
         self.y += speed
 
     def off_screen(self, height):
-        return height <= self.y <= 0
+        return not height >= self.y >= 0
 
     def collision(self, obj):
         return collide(obj, self)

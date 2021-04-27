@@ -15,7 +15,7 @@ class Player(Ship):
         self.laser_img = PLAYER_LASER
         self.mask = pygame.mask.from_surface(self.ship_img)
         self.max_health = health
-        self.player_speed = 5
+        self.player_speed = 6
 
     def move_lasers(self, speed, objs):
         self.cooldown()
@@ -28,6 +28,10 @@ class Player(Ship):
                     if laser.collision(obj):
                         objs.remove(obj)
                         self.lasers.remove(laser)
+
+    def health_bar(self, window):
+        pygame.draw.rect(window, (255, 0, 0), (self.x, self.y + self.ship_img.get_height() + 10, self.ship_img.get_width(), 10))
+        pygame.draw.rect(window, (0, 255, 0), (self.x, self.y + self.ship_img.get_height() + 10, self.ship_img.get_width() * (1 - ((self.max_health - self.health) / self.max_health)), 10))
 
     def move(self, window_width, window_height):
         keys = pygame.key.get_pressed()

@@ -43,6 +43,7 @@ class Game:
         for enemy in self.enemies:
             enemy.draw(self.WIN)
         self.player.draw(self.WIN)
+        self.player.health_bar(self.WIN)
 
         if self.lost:
             lost_label = self.lost_font.render("You Lost!!!", True, (255, 255, 255))
@@ -55,6 +56,9 @@ class Game:
             self.clock.tick(self.FPS)
             if self.lives <= 0:
                 self.lost = True
+            if self.player.health <= 0:
+                self.lives -= 1
+                self.player.health = 100
             # Creates list of enemies. Advances level if no enemies exist
             if len(self.enemies) == 0:
                 self.level += 1
@@ -66,7 +70,7 @@ class Game:
 
             # Updates window
             self.update_window()
-
+            # Checks for window close
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.play = False
@@ -77,6 +81,15 @@ class Game:
             for enemy in self.enemies[:]:
                 enemy.move()
                 enemy.move_lasers(self.laser_speed, self.player)
+
+                # Checks for collision between player and enemy ships
+                if enemy.check_collide(self.player):
+                    self.player.health -= 10
+                    self.enemies.remove(enemy)
+
+                # Gets random chance for enemy to shoot
+                if random.randrange(0, 4*60) == 1:
+                    enemy.shoot()
                 # Checks to see if enemy ship has reached bottom of game window and removes enemy from list and one life
                 if enemy.get_height() + enemy.y > levels.HEIGHT:
                     self.lives -= 1

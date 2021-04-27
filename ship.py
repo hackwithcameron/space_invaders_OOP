@@ -1,5 +1,6 @@
 from laser import Laser
-from levels import WIDTH, HEIGHT
+from levels import HEIGHT
+from collision_detection import collide
 
 
 class Ship:
@@ -40,6 +41,9 @@ class Ship:
             laser = Laser(self.x, self.y, self.laser_img)
             self.lasers.append(laser)
             self.cool_down_counter = 1
+
+    def check_collide(self, obj):
+        return collide(self, obj)
 
     def get_width(self):
         return self.ship_img.get_width()

@@ -1,7 +1,7 @@
 import pygame
 import os
 
-
+from laser import Laser
 from ship import Ship
 
 
@@ -23,9 +23,16 @@ class Enemy(Ship):
     def __init__(self, x, y, color, health=100):
         super().__init__(x, y, health)
         self.ship_img, self.laser_img = self.SHIP_MAP[color]
-        self.speed = 1
+        self.speed = 2
         self.mask = pygame.mask.from_surface(self.ship_img)
 
     def move(self):
         self.y += self.speed
+
+    def shoot(self):
+        if self.cool_down_counter == 0:
+            laser = Laser(self.x - 20, self.y, self.laser_img)
+            self.lasers.append(laser)
+            self.cool_down_counter = 1
+
 
