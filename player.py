@@ -1,7 +1,8 @@
 import pygame
 import os
-from controller import Controller
+from levels import HEIGHT
 from ship import Ship
+
 
 PLAYER_SHIP = pygame.image.load(os.path.join("assets", "pixel_ship_yellow.png"))
 PLAYER_LASER = pygame.image.load(os.path.join("assets", "pixel_laser_yellow.png"))
@@ -16,6 +17,18 @@ class Player(Ship):
         self.max_health = health
         self.player_speed = 5
 
+    def move_lasers(self, speed, objs):
+        self.cooldown()
+        for laser in self.lasers:
+            laser.move(speed)
+            if laser.off_screen(HEIGHT):
+                self.lasers.remove(laser)
+            else:
+                for obj in objs:
+                    if laser.collision(obj):
+                        objs.remove(obj)
+                        self.lasers.remove(laser)
+
     def move(self, window_width, window_height):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a] and self.x > 0:  # Move Left
@@ -26,3 +39,5 @@ class Player(Ship):
             self.y -= self.player_speed
         if keys[pygame.K_s] and self.y + self.get_height() + self.player_speed < window_height:  # Move Down
             self.y += self.player_speed
+        if keys[pygame.K_SPACE]:
+            self.shoot()
